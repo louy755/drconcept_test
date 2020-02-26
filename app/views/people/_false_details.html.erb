@@ -1,0 +1,244 @@
+<div class="container" style= 'background-color: #F0FFFF'><br>
+  <div class="row">
+    <div class="col-sm">
+      <p>
+        <strong>Name:</strong>
+        <%= @person.name.titleize %>
+      </p>
+      <p>
+        <strong>Phone:</strong>
+        <%= @person.phone %>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <%= @person.email %>
+      </p>
+    </div>
+    <div class="col-sm">
+      <p>
+        <strong>Address:</strong>
+        <%= @person.address.titleize %>
+      </p>
+      <p>
+        <strong>Address2:</strong>
+        <%= @person.address2.titleize %>
+      </p>
+      <p>
+        <strong>City:</strong>
+        <%= @person.city.titleize %>
+      </p>
+    </div>
+    <div class="col-sm">
+      <p>
+        <strong>State:</strong>
+        <%= @person.state.capitalize %>
+      </p>
+      <p>
+        <strong>Zip:</strong>
+        <%= @person.zip %>
+      </p>
+      <p>
+        <strong>Sale Rep:</strong>
+        <%= @person.sale_rep.capitalize %>
+      </p>
+    </div>
+  </div><br>
+  <div class="container" style="width: 93%">
+  <button type="button" class="btn btn-warning btn-lg btn-block">Item Purchase Details!</button>
+  </div>
+    <center>
+      <table class='table table-hover table-striped' style="width: 90%;">
+        <thead class='table-dark'>
+          <tr>
+            <th>QNTY</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Subtotal</th>
+            <th>Tax</th>
+            <th>Total</th>
+            <% if current_user  && current_user.admin? %>
+              <th>Action</th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%  %>
+          <% @person.goods.each do |itm| %>
+            <tr>
+              <td><%= itm.qnt %></td>
+              <td><%= number_to_currency itm.price %></td>
+              <td><%= itm.item %></td>
+              <td><%= itm.description %></td>
+              <% sub_totl = itm.price * itm.qnt %>
+              <td><%= number_to_currency sub_totl %></td>
+              <% tax_itm = itm.price * itm.qnt * 10.25 / 100%>
+              <td><%= number_to_currency tax_itm %></td>
+              <td><%= number_to_currency sub_totl + tax_itm  %></td>
+              <% if current_user  && current_user.admin? %>
+                <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table><hr><br>
+    </center>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+    <button type="button" class="btn btn-success btn-lg btn-block">Payments Details</button><br>
+      <center>
+        <% @person.pays.each do |pay| %>
+          <font size="3" color="green"> payment: </font> &nbsp;&nbsp;<%= pay.method %>
+          <%= number_to_currency pay.amount %> &nbsp;&nbsp;
+          <% if current_user  && current_user.admin? %>
+            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, pay], method: :delete, data: { confirm: 'You are about delete this item!' } %></td><br>
+          <% end %>
+        <% end %>
+      </center>
+      <hr>
+      <font size="5" color="green"><%= number_to_currency tot_pay %> Total Payments</font>
+
+    </div>
+    <div class="col-sm">
+      <button type="button" class="btn btn-success btn-lg btn-block">Delivery Details</button><br>
+      <center>
+        <% @person.delivers.each do |delv| %>
+          Delivert Fee: <%= delv.delivery %><br>
+          Fee: <%= delv.fee %><br>
+          Discount: <%= delv.discount %><br>
+          Delivery Date: <%= delv.delivery_date %><br>
+          <% if current_user  && current_user.admin? %>
+            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
+          <% end %>
+          <hr>
+        <% end %>
+      </center>
+    </div>
+    <div class="col-sm">
+      <font size="4" color="red"><%= number_to_currency sub_totls %> Items Subtotal</font><br>
+      <font size="4" color="red"><%= number_to_currency tax_calc %> Invoice TAX</font><br>
+      <font size="4" color="red"><%= number_to_currency inv_delivery %> Delivery Fee</font><br>
+      <font size="4" color="red"><%= number_to_currency inv_fee   %> Fee If Apply  -</font><br>
+      <font size="4" color="blue"><%= number_to_currency inv_dicount  %> Discount If Apply</font><br>
+      <hr>
+      <font size="5" color="red"><%= number_to_currency totall %> Invoice Due!</font><br>
+      <font size="5" color="green"><%= number_to_currency tot_pay %> Total Payments</font><br>
+      <hr>
+      <center>
+        <font size="6" color="red"><%= number_to_currency tot %><br> Invoice Remaining</font>
+      </center>
+
+    </div>
+  </div>
+</div><br>
+
+
+<a href="#" id="show_items">
+  <button type="button" class="btn btn-info btn-lg btn-block"><h3>1- Click to Add Items Details!</h3></button><br>
+</a>
+<div id="items" class="hidden">
+  <div class="container" style= 'background-color: #F0FFFF'>
+    <%= form_for [@person, @person.goods.build] do |f| %>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm"><br>
+          <%= f.label :item %>
+            <%= f.select :item, [ 'SELECT ITEM','BedRomm', 'Sofa', ['Loveseat'], ['Chair']] %>
+          </div>
+          <div class="col-sm">
+            <%= f.label :qnt %><br>
+            <%= f.select :qnt, [0,1,2,3,4,5,6,7,8,9,10,11,12] %>
+          </div>
+          <div class="col-sm">
+            <%= f.label :description %>
+            <%= f.text_field :description %>
+          </div>
+          <div class="col-sm">
+            <%= f.label :price %>
+            <%= f.text_field :price %>
+          </div>
+          <div class="col-sm">
+          <%= f.label :vendor %><br>
+            <%= f.select:vendor, [ 'SELECT VENDOR','Titanic', 'United', ['Coaster'], ['Other']] %>
+          </div>
+        </div>
+
+          <div class="col-sm"><br>
+            <div class="actions">
+              <button class="btn btn-success btn-lg btn-block " type="submit"><h3> Click here to ADD New Item!</h3></button>
+            </div><br>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div><br>
+
+<a href="#" id="show_delivery">
+  <button type="button" class="btn btn-info btn-lg btn-block"><h3>2- Click to Add Delivery Details!</h3></button>
+</a><br>
+<div id="delivery" class="hidden">
+  <div class="container" style= 'background-color: #F0FFFF'><br>
+    <%= form_for [@person, @person.delivers.build] do |f| %>
+      <div class="row">
+        <div class="col">
+          <div class="col-sm">
+            Delivery Fee: <%= f.text_field :delivery %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Fee If Applay: <%= f.text_field :fee%>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Discoint If Applay: <%= f.text_field :discount %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Delivery Date<%= f.date_select :delivery_date %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm"><br>
+        <div class="actions">
+          <button class="btn btn-success btn-lg btn-block " type="submit"><h3>Click here to ADD Delivery  Details and Discount if Applay!</h3></button>
+        </div><br>
+      </div>
+    <% end %>
+  </div><br>
+</div><br><br>
+
+<a href="#" id="show_pays">
+  <button type="button" class="btn btn-info btn-lg btn-block"><h3>3- Click to Add Payment Details!</h3></button><br>
+</a>
+<div id="pays" class="hidden">
+  <div class="container" style= 'background-color: #F0FFFF'><br>
+    <%= form_for [@person, @person.pays.build] do |f| %>
+      <div class="row">
+        <div class="col">
+          <div class="col-sm">
+          <%= f.label :amount %>
+          <%= f.text_field :amount%>
+        </div>
+          </div>
+          <div class="col">
+          <div class="col-sm">
+            <%= f.label :method %>
+            <%= f.text_field :method %>
+          </div>
+          </div>
+        </div>
+      <div class="col-sm"><br>
+        <div class="actions">
+          <button class="btn btn-success btn-lg btn-block " type="submit"><h3> Click here to ADD Payment!</h3></button>
+        </div><br>
+      </div>
+    <% end %>
+  </div><br>
+</div><br>
+</div><br>

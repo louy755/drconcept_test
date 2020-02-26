@@ -1,0 +1,56 @@
+<% if current_user  && current_user.admin? %>
+  <div class='container'>
+  <table class='table table-hover table-striped'>
+    <thead class='table-dark'>
+      <tr>
+        <th>Total Invoce</th>
+        <th>Sub Total</th>
+        <th>Tax</th>
+        <th>Discount</th>
+        <th>Delivery</th>
+        <th>Fee</th>
+        <th>Cost</th>
+        <th>Profit</th>
+        <th>Margin</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+          <td><%= number_to_currency @person.total %></td>
+            <td><%= number_to_currency @person.subtotal %></td>
+            <td><%= number_to_currency @person.tax %></td>
+            <td><%= number_to_currency @person.discount %></td>
+            <td><%= number_to_currency @person.delivery %></td>
+            <td><%= number_to_currency @person.fee %></td>
+            <td><%= number_to_currency @person.cost %></td>
+            <td><%= number_to_currency   prof = @person.subtotal - @person.cost  %></td>
+            <td><%= ( prof / @person.subtotal * 100).round(2) %> %</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+<% end %>
+<%= link_to "print Recipt (PDF)", person_path(@person, format: 'pdf'), class:"btn btn-outline-success" %><br><br>
+<% if @person.finance == false %>
+<button type="button" class="btn btn-danger btn-lg btn-block">
+  <h3>Payment need Attention</h3>
+</button><br>
+  <button type="button" class="btn btn-primary btn-lg btn-block">Purchase Details for <%= @person.name.titleize  %></button>
+  <%= render 'false_details' %>
+<% else %>
+  <button type="button" class="btn btn-success btn-lg btn-block"><h3>
+    Finance Purchase  Paid in Full&nbsp;&nbsp; <%= number_to_currency @person.total  %></h3>
+  </button><br>
+  <button type="button" class="btn btn-primary btn-lg btn-block">Purchase Details for <%= @person.name.titleize  %></button>
+  <%= render 'else_details' %>
+  <%= render 'items' %>
+  <%= render 'delivery' %>
+
+<% end %>
+
+<br>
+<% if current_user  && current_user.admin? %>
+  <%= link_to 'Edit Customer Information Only!', edit_person_path(@person), :class => "btn btn-danger"  %>
+<% end %>
+<%= link_to 'Back to All Invoices!', people_path, :class => "btn btn-outline-success"  %>

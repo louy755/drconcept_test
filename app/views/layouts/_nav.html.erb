@@ -1,0 +1,24 @@
+<nav class="navbar navbar-light" style="background-color: #99ccff;">
+<%= link_to 'DR CONCEPT' , people_path, :class => "btn btn-primary"%>&nbsp;&nbsp;
+  <form class="form-inline my-2 my-lg-0">
+    <% if current_user  && current_user.admin? %>
+      <%= link_to 'Owner', more_info_path, :class => "btn btn-outline-primary"%>&nbsp;&nbsp;
+    <% end %>
+    <% if user_signed_in? %>
+      <button type="button" class="btn btn-primary">
+        Rep Name <span class="badge badge-light"><%= current_user.username %></span>
+        <span class="sr-only">unread messages</span>
+      </button>&nbsp;&nbsp;
+
+      <%= link_to 'Edit profile', edit_user_registration_path, :class => "btn btn-outline-primary"%>&nbsp;&nbsp;
+
+      <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => "btn btn-outline-primary"  %>
+    <% else %>
+      <%= link_to "Sign up", new_user_registration_path, :class => "btn btn-outline-primary"  %>&nbsp;&nbsp;
+      <%= link_to "Login", new_user_session_path, :class => "btn btn-outline-primary" %>
+    <% end %>
+    </form>
+</nav>
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>"><%= value %></div>
+<% end %>

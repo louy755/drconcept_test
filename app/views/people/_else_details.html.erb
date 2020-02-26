@@ -1,0 +1,119 @@
+<div class="container" style= 'background-color: #F0FFFF'><br>
+  <div class="row">
+    <div class="col-sm">
+      <p>
+        <strong>Name:</strong>
+        <%= @person.name.titleize %>
+      </p>
+      <p>
+        <strong>Phone:</strong>
+        <%= @person.phone %>
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <%= @person.email %>
+      </p>
+    </div>
+    <div class="col-sm">
+      <p>
+        <strong>Address:</strong>
+        <%= @person.address.titleize %>
+      </p>
+      <p>
+        <strong>Address2:</strong>
+        <%= @person.address2.titleize %>
+      </p>
+      <p>
+        <strong>City:</strong>
+        <%= @person.city.titleize %>
+      </p>
+    </div>
+    <div class="col-sm">
+      <p>
+        <strong>State:</strong>
+        <%= @person.state.capitalize %>
+      </p>
+      <p>
+        <strong>Zip:</strong>
+        <%= @person.zip %>
+      </p>
+      <p>
+        <strong>Sale Rep:</strong>
+        <%= @person.sale_rep.capitalize %>
+      </p>
+    </div>
+  </div><br>
+  <div class="container" style="width: 93%">
+  <button type="button" class="btn btn-warning btn-lg btn-block">Item Purchase Details!</button>
+  </div>
+
+  <center>
+    <table class='table table-hover table-striped' style="width: 90%;">
+      <thead class='table-dark'>
+        <tr>
+          <th>QNTY</th>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Description</th>
+          <th>Subtotal</th>
+          <th>Tax</th>
+          <th>Total</th>
+          <% if current_user  && current_user.admin? %>
+            <th>Action</th>
+          <% end %>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%  %>
+        <% @person.goods.each do |itm| %>
+          <tr>
+            <td><%= itm.qnt %></td>
+            <td><%= number_to_currency itm.price %></td>
+            <td><%= itm.item %></td>
+            <td><%= itm.description %></td>
+            <% sub_totl = itm.price * itm.qnt %>
+            <td><%= number_to_currency sub_totl %></td>
+            <% tax_itm = itm.price * itm.qnt * 10.25 / 100%>
+            <td><%= number_to_currency tax_itm %></td>
+            <td><%= number_to_currency sub_totl + tax_itm  %></td>
+            <% if current_user  && current_user.admin? %>
+              <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
+            <% end %>
+          </tr>
+        <% end %>
+    </table><hr><br>
+  </center>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <button type="button" class="btn btn-success btn-lg btn-block">Delivery Details</button><br>
+        <center>
+          <% @person.delivers.each do |delv| %>
+            Delivert Fee: <%= delv.delivery %><br>
+            Fee: <%= delv.fee %><br>
+            Discount: <%= delv.discount %><br>
+            Delivery Date: <%= delv.delivery_date %><br>
+            <% if current_user  && current_user.admin? %>
+              <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
+            <% end %>
+          <% end %>
+        </center>
+      </div>
+      <div class="col">
+        <font size="4" color="red"><%= number_to_currency sub_totls %> Invoice Subtotal</font><br>
+        <font size="4" color="red"><%= number_to_currency tax_calc %> Invoice TAX</font><br>
+        <font size="4" color="red"><%= number_to_currency inv_delivery  %> Delivery Fee</font><br>
+        <font size="4" color="red"><%= number_to_currency inv_fee %> Fee If Apply  -</font><br>
+        <hr>
+
+        <font size="4" color="blue"><%= number_to_currency inv_dicount  %> Discount If Apply</font><br>
+        <hr>
+        <center>
+          <font size="6" color="green"> <%= number_to_currency totall  %> Paid in Full ACEMA </font>
+        </center><br>
+      </div>
+    </div>
+  </div>
+
+</div><br>

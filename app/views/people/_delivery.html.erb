@@ -1,0 +1,36 @@
+<a href="#" id="show_delivery">
+  <button type="button" class="btn btn-info btn-lg btn-block"><h3>2- Click to Add Delivery Details!</h3></button>
+</a><br>
+<div id="delivery" class="hidden">
+  <div class="container" style= 'background-color: #F0FFFF'><br>
+    <%= form_for [@person, @person.delivers.build] do |f| %>
+      <div class="row">
+        <div class="col">
+          <div class="col-sm">
+            Delivery Fee: <%= f.text_field :delivery %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Fee If Applay: <%= f.text_field :fee%>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Discoint If Applay: <%= f.text_field :discount %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-sm">
+            Delivery Date<%= f.date_select :delivery_date %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm"><br>
+        <div class="actions">
+          <button class="btn btn-success btn-lg btn-block " type="submit"><h3>Click here to ADD Delivery  Details and Discount if Applay!</h3></button>
+        </div><br>
+      </div>
+    <% end %>
+  </div><br>
+</div><br><br>

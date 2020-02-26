@@ -1,0 +1,28 @@
+<a href="#" id="show_pays">
+  <button type="button" class="btn btn-info btn-lg btn-block"><h3>3- Click to Add Payment Details!</h3></button><br>
+</a>
+<div id="pays" class="hidden">
+  <div class="container" style= 'background-color: #F0FFFF'><br>
+    <%= form_for [@person, @person.pays.build] do |f| %>
+      <div class="row">
+        <div class="col">
+          <div class="col-sm">
+          <%= f.label :amount %>
+          <%= f.text_field :amount%>
+        </div>
+          </div>
+          <div class="col">
+          <div class="col-sm">
+            <%= f.label :method %>
+            <%= f.text_field :method %>
+          </div>
+          </div>
+        </div>
+      <div class="col-sm"><br>
+        <div class="actions">
+          <button class="btn btn-success btn-lg btn-block " type="submit"><h3> Click here to ADD Payment!</h3></button>
+        </div><br>
+      </div>
+    <% end %>
+  </div><br>
+</div><br>
