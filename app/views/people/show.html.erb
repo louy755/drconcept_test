@@ -1,6 +1,6 @@
 <% if current_user  && current_user.admin? %>
   <div class='container'>
-  <table class='table table-hover table-striped'>
+    <table class='table table-hover table-striped'>
     <thead class='table-dark'>
       <tr>
         <th>Total Invoce</th>
@@ -29,13 +29,13 @@
         </tr>
     </tbody>
   </table>
-</div>
+  </div>
 <% end %>
 <%= link_to "print Recipt (PDF)", person_path(@person, format: 'pdf'), class:"btn btn-outline-success" %><br><br>
 <% if @person.finance == false %>
-<button type="button" class="btn btn-danger btn-lg btn-block">
-  <h3>Payment need Attention</h3>
-</button><br>
+  <button type="button" class="btn btn-danger btn-lg btn-block">
+    <h3>Payment need Attention</h3>
+  </button><br>
   <button type="button" class="btn btn-primary btn-lg btn-block">Purchase Details for <%= @person.name.titleize  %></button>
   <%= render 'false_details' %>
 <% else %>
@@ -46,7 +46,6 @@
   <%= render 'else_details' %>
   <%= render 'items' %>
   <%= render 'delivery' %>
-
 <% end %>
 
 <br>
