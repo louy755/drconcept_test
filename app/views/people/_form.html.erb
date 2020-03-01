@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="container" style="background-color: #cceeff;" >
+  <div class="container" style="background-color: #cceeff;" ><br>
     <div class="row">
       <div class="col-sm">
         <div class="field">
@@ -47,17 +47,16 @@
       </div>
       <div class="col-sm">
         <div class="field">
-          <%= form.label :state %>
-          <%= form.select :item, [ 'SELECT STATE','ILLINOiS', 'INDEANA', ['WISCONSIN']] %>
-        </div>
-
-        <div class="field">
           <%= form.label :zip %>
           <%= form.text_field :zip, class:'form-control' %>
         </div><br>
+        <div class="field">
+          <%= form.label :state %>
+          <%= form.select :state, [ 'SELECT STATE','ILLINOIS', 'INDEANA', ['WISCONSIN']] %>
+        </div><br>
 
         <div class="field">
-          <%= form.select :sale_rep,[current_user.username] %>
+          Sale Rep: <%= form.select :sale_rep,[current_user.username] %>
         </div>
       </div>
     </div><br>

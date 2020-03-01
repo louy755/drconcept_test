@@ -76,9 +76,7 @@
               <% tax_itm = itm.price * itm.qnt * 10.25 / 100%>
               <td><%= number_to_currency tax_itm %></td>
               <td><%= number_to_currency sub_totl + tax_itm  %></td>
-              <% if current_user  && current_user.admin? %>
-                <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
-              <% end %>
+              <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
             </tr>
           <% end %>
         </tbody>
@@ -89,33 +87,25 @@
   <div class="row">
     <div class="col-sm">
     <button type="button" class="btn btn-success btn-lg btn-block">Payments Details</button><br>
-      <center>
-        <% @person.pays.each do |pay| %>
-          <font size="3" color="green"> payment: </font> &nbsp;&nbsp;<%= pay.method %>
-          <%= number_to_currency pay.amount %> &nbsp;&nbsp;
-          <% if current_user  && current_user.admin? %>
-            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, pay], method: :delete, data: { confirm: 'You are about delete this item!' } %></td><br>
-          <% end %>
-        <% end %>
-      </center>
+      <% (@person.pays).each_with_index do |pay, index| %>
+        <%= index = index + 1 %>- <font size="4" color="green">&nbsp;&nbsp;&nbsp;&nbsp;<%= pay.method %></font>
+        <%= number_to_currency pay.amount %> &nbsp;&nbsp;&nbsp;&nbsp;
+        <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, pay], method: :delete, data: { confirm: 'You are about delete this item!' } %></td><br>
+      <% end %>
       <hr>
       <font size="5" color="green"><%= number_to_currency tot_pay %> Total Payments</font>
 
     </div>
     <div class="col-sm">
       <button type="button" class="btn btn-success btn-lg btn-block">Delivery Details</button><br>
-      <center>
-        <% @person.delivers.each do |delv| %>
-          Delivert Fee: <%= delv.delivery %><br>
-          Fee: <%= delv.fee %><br>
-          Discount: <%= delv.discount %><br>
-          Delivery Date: <%= delv.delivery_date %><br>
-          <% if current_user  && current_user.admin? %>
-            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
-          <% end %>
-          <hr>
-        <% end %>
-      </center>
+      <% @person.delivers.each do |delv| %>
+        Delivert Fee: <%= delv.delivery %><br>
+        Fee: <%= delv.fee %><br>
+        Discount: <%= delv.discount %><br>
+        Delivery Date: <%= delv.delivery_date %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
+        <hr>
+      <% end %>
     </div>
     <div class="col-sm">
       <font size="4" color="red"><%= number_to_currency sub_totls %> Items Subtotal</font><br>
@@ -128,7 +118,16 @@
       <font size="5" color="green"><%= number_to_currency tot_pay %> Total Payments</font><br>
       <hr>
       <center>
-        <font size="6" color="red"><%= number_to_currency tot %><br> Invoice Remaining</font>
+        <% if tot < 0 %>
+          <%= image_tag('x.gif',  height: '90px', width: '90px') %>
+          <font size="5" color="red">
+          <button type="button" class="btn btn-danger btn-lg btn-block">
+            <h4><%= number_to_currency tot %></h4>
+          </button>
+             Please Corret this Invoice Remaining</font>
+        <% else %>
+         <font size="6" color="red"><%= number_to_currency tot %><br> Invoice Remaining</font>
+        <% end %>
       </center>
 
     </div>
@@ -144,13 +143,13 @@
     <%= form_for [@person, @person.goods.build] do |f| %>
       <div class="container">
         <div class="row">
-          <div class="col-sm"><br>
-          <%= f.label :item %>
-            <%= f.select :item, [ 'SELECT ITEM','BedRoom', 'Sofa', ['Loveseat'], ['Chair'], ['Sofa Set']] %>
-          </div>
           <div class="col-sm">
             <%= f.label :qnt %><br>
             <%= f.select :qnt, [0,1,2,3,4,5,6,7,8,9,10,11,12] %>
+          </div>
+          <div class="col-sm">
+          <%= f.label :item %>
+            <%= f.text_field :item %>
           </div>
           <div class="col-sm">
             <%= f.label :description %>

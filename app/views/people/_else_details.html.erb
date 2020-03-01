@@ -58,9 +58,7 @@
           <th>Subtotal</th>
           <th>Tax</th>
           <th>Total</th>
-          <% if current_user  && current_user.admin? %>
-            <th>Action</th>
-          <% end %>
+          <th>Action</th>
         </tr>
       </thead>
 
@@ -77,9 +75,7 @@
             <% tax_itm = itm.price * itm.qnt * 10.25 / 100%>
             <td><%= number_to_currency tax_itm %></td>
             <td><%= number_to_currency sub_totl + tax_itm  %></td>
-            <% if current_user  && current_user.admin? %>
-              <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
-            <% end %>
+            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, itm], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
           </tr>
         <% end %>
     </table><hr><br>
@@ -94,9 +90,7 @@
             Fee: <%= delv.fee %><br>
             Discount: <%= delv.discount %><br>
             Delivery Date: <%= delv.delivery_date %><br>
-            <% if current_user  && current_user.admin? %>
-              <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
-            <% end %>
+            <td><%= link_to (image_tag('delx.png',  height: '40px', width: '40px')), [@person, delv], method: :delete, data: { confirm: 'You are about delete this item!' } %></td>
           <% end %>
         </center>
       </div>
